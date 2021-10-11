@@ -16,11 +16,11 @@ app.use((req, res, next) => {
 });
 app.use(userRouter);
 app.use(cardsRouter);
-
+app.use((req, res) => {
+  res.status(404).send({ message: 'Не удалось получить данные' });
+});
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
-  // useCreateIndex: true,
-  // useFindAndModify: false,
 });
 
 app.listen(PORT);
