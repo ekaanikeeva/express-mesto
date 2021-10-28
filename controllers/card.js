@@ -22,18 +22,25 @@ module.exports.getCards = (req, res) => {
 };
 
 // удалить карточку по id
-module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params._id)
+module.exports.deleteCard = (req, res, next) => {
+  Card.findById(req.params._id)
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: '404 — Передан несуществующий _id карточки' });
-      } else res.send(card);
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Невалидный id ' });
+      if (card.owner.toString() !== req.user._id) {
+        res.status(403).send({ message: 'Недостаточно прав для удаления этой карточки' });
       }
-    });
+      Card.findByIdAndRemove(req.params._id)
+        .then((userCard) => {
+          if (!userCard) {
+            res.status(404).send({ message: '404 — Передан несуществующий _id карточки' });
+          } else res.send(userCard);
+        })
+        .catch((err) => {
+          if (err.name === 'CastError') {
+            res.status(400).send({ message: 'Невалидный id ' });
+          }
+        });
+    })
+    .catch(next);
 };
 
 // лайк

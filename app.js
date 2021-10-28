@@ -2,20 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./routes/user');
 const cardsRouter = require('./routes/card');
+const { login, createUser } = require('./controllers/user');
+const auth = require('./middlewares/auth');
 
 const app = express();
 
 const { PORT = 3000 } = process.env;
 
 app.use(express.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: '615ec84e34f958002d6de319',
-  };
-  next();
-});
+
+app.post('/signin', login);
+app.post('/signup', createUser);
+// app.use(auth);
 app.use(userRouter);
 app.use(cardsRouter);
+
 app.use((req, res) => {
   res.status(404).send({ message: 'Не удалось получить данные' });
 });
