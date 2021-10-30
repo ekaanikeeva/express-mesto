@@ -1,10 +1,5 @@
 const Card = require('../models/card');
 
-const InternalServerError = require('../errors/InternalServerError');
-const Forbidden = require('../errors/Forbidden');
-const NotFoundError = require('../errors/NotFoundError');
-const BadRequest = require('../errors/BadRequest');
-
 // создать новую карточку
 module.exports.createCard = (req, res, next) => {
   const creatorId = req.user._id;
@@ -13,7 +8,7 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner: creatorId })
     .then((card) => res.send(card))
     .catch(() => {
-      throw new InternalServerError('Не удалось добавить карточку');
+      res.status(500).send({message: 'Не удалось добавить карточку'});
     })
     .catch(next);
 };
@@ -23,7 +18,7 @@ module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send(cards))
     .catch(() => {
-      throw new InternalServerError('Карточки не получены');
+      res.status(500).send({message: 'Карточки не получены'});
     })
     .catch(next);
 };
@@ -33,17 +28,17 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params._id)
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        throw new Forbidden('Недостаточно прав для удаления этой карточки');
+      return res.status(403).send({message: 'Недостаточно прав для удаления этой карточки'});
       }
       Card.findByIdAndRemove(req.params._id)
         .then((userCard) => {
           if (!userCard) {
-            throw new NotFoundError('Передан несуществующий _id карточки');
+            res.status(404).send({message: 'Невалидный id'});
           } else res.send(userCard);
         })
         .catch((err) => {
           if (err.name === 'CastError') {
-            throw new BadRequest('Невалидный id');
+            res.status(404).send({message: 'Невалидный id'});
           }
         });
     })
@@ -59,15 +54,15 @@ module.exports.likeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Передан несуществующий _id карточки');
+        res.status(404).send({message: 'Невалидный id'});
       } else {
         res.send(card);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Невалидный id');
-      } else throw new InternalServerError('Лайк не поставлен. Ошибка');
+        res.status(404).send({message: 'Невалидный id'});
+      } else res.status(500).send({message: 'Лайк не поставлен. Ошибка'});
     })
     .catch(next);
 };
@@ -81,16 +76,16 @@ module.exports.dislikeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Передан несуществующий _id карточки');
+        res.status(404).send({message: 'Невалидный id'});
       } else {
         res.send(card);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Невалидный id');
+        res.status(404).send({message: 'Невалидный id'});
       } else {
-        throw new InternalServerError('Лайк не удален. Ошибка');
+        res.status(500).send({message: 'Лайк не удален. Ошибка'});
       }
     })
     .catch(next);
