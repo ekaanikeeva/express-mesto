@@ -29,7 +29,7 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError({ message: 'Невалидный id '});
+        throw new NotFoundError({ message: 'Невалидный id ' });
       } return res.send(user);
     })
     .catch(next);
