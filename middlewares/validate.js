@@ -1,14 +1,13 @@
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
-const BadRequest = require('../errors/BadRequest')
+// const BadRequest = require('../errors/BadRequest');
 
 const validationLink = (value) => {
-  let result = validator.isURL(value);
-  if(result) {
-  return value;
-  } else {
-  throw new Error('URL validation err');
-  }
+  // На let ругается линтер
+  const result = validator.isURL(value);
+  if (result) {
+    return value;
+  } throw new Error('URL validation err');
 };
 
 const validateSignIn = celebrate({
@@ -22,9 +21,6 @@ const validateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required().min(2).max(20),
-    avatar: Joi.string().custom(validationLink).required(),
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
   }),
 });
 
@@ -52,5 +48,5 @@ module.exports = {
   validateAvatar,
   validateCard,
   validateId,
-  validateSignIn
-}
+  validateSignIn,
+};
