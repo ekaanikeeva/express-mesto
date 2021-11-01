@@ -5,6 +5,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const IntervalServerError = require('../errors/Unauthorized');
 const BadRequest = require('../errors/BadRequest');
 const ConflictingRequest = require('../errors/ConflictingRequest');
+const Unauthorized = require('../errors/Unauthorized');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -106,10 +107,8 @@ module.exports.login = (req, res, next) => {
         })
         .send({ token });
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
+    .catch(() => {
+      throw new Unauthorized({ message: 'Необходима авторизация' });
     })
     .catch(next);
 };
