@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const userRouter = require('./routes/user');
 const cardsRouter = require('./routes/card');
@@ -15,12 +16,13 @@ const { PORT = 3000 } = process.env;
 
 app.use(cookieParser());
 app.use(express.json());
-
+app.use(requestLogger);
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignIn, createUser);
 app.use(auth);
 app.use(userRouter);
 app.use(cardsRouter);
+app.use(errorLogger);
 app.use(errors());
 app.use(() => {
   throw new NotFoundError({ message: '404- Ресурс не найден' });
