@@ -12,7 +12,7 @@ const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 
-const { PORT = 3030 } = process.env;
+const { PORT = 3000 } = process.env;
 
 app.use(cookieParser());
 app.use(express.json());
