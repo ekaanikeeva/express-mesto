@@ -1,7 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
@@ -37,9 +37,10 @@ const corsOption = {
   },
 };
 
-app.use(cors(corsOption));
+
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors(corsOption));
 app.use(requestLogger);
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignIn, createUser);
