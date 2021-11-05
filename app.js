@@ -15,32 +15,36 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
-const allowedCors = [
-  'https://ekaanikeeva.nomoredomains.rocks',
-  'http://ekaanikeeva.nomoredomains.rocks',
-  'http://localhost:3000',
-  'https://ekaanikeeva.backend.nomoredomains.rocks',
-  'http://ekaanikeeva.backend.nomoredomains.rocks',
-  'https://ekaanikeeva.backend.nomoredomains.rocks/cards',
-  'https://ekaanikeeva.backend.nomoredomains.rocks/users/me',
-
-];
-
-const corsOption = {
+app.use('*', cors({
+  origin: 'https://ekaanikeeva.backend.nomoredomains.rocks',
   credentials: true,
-  origin: function checkCorsList(origin, callback) {
-    if (allowedCors.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
+}));
+// const allowedCors = [
+//   'https://ekaanikeeva.nomoredomains.rocks',
+//   'http://ekaanikeeva.nomoredomains.rocks',
+//   'http://localhost:3000',
+//   'https://ekaanikeeva.backend.nomoredomains.rocks',
+//   'http://ekaanikeeva.backend.nomoredomains.rocks',
+//   'https://ekaanikeeva.backend.nomoredomains.rocks/cards',
+//   'https://ekaanikeeva.backend.nomoredomains.rocks/users/me',
 
+// ];
+
+// const corsOption = {
+//   credentials: true,
+//   origin: function checkCorsList(origin, callback) {
+//     if (allowedCors.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+// };
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors(corsOption));
+// app.use(cors(corsOption));
+
 app.use(requestLogger);
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignIn, createUser);
