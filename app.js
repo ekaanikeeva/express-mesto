@@ -21,6 +21,8 @@ const allowedCors = [
   'localhost:3000',
   'https://ekaanikeeva.backend.nomoredomains.rocks',
   'http://ekaanikeeva.backend.nomoredomains.rocks',
+  'http://ekaanikeeva.backend.nomoredomains.rocks/cards',
+  'http://ekaanikeeva.backend.nomoredomains.rocks/users/me',
 
 ];
 
