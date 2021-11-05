@@ -15,7 +15,9 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://ekaanikeeva.nomoredomains.rocks',
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
