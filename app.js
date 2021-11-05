@@ -18,11 +18,11 @@ const { PORT = 3000 } = process.env;
 const allowedCors = [
   'https://ekaanikeeva.nomoredomains.rocks',
   'http://ekaanikeeva.nomoredomains.rocks',
-  'localhost:3000',
+  'http://localhost:3000',
   'https://ekaanikeeva.backend.nomoredomains.rocks',
   'http://ekaanikeeva.backend.nomoredomains.rocks',
-  'http://ekaanikeeva.backend.nomoredomains.rocks/cards',
-  'http://ekaanikeeva.backend.nomoredomains.rocks/users/me',
+  'https://ekaanikeeva.backend.nomoredomains.rocks/cards',
+  'https://ekaanikeeva.backend.nomoredomains.rocks/users/me',
 
 ];
 
