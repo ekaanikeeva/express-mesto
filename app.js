@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
+// const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
@@ -15,9 +15,28 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
-app.use(cors({
-  origin: 'http://ekaanikeeva.nomoredomains.rocks',
-}));
+const allowedCors = [
+  'https://ekaanikeeva.nomoredomains.rocks',
+  'http://ekaanikeeva.nomoredomains.rocks',
+  'localhost:3000',
+  'https://ekaanikeeva.backend.nomoredomains.rocks',
+  'http://ekaanikeeva.backend.nomoredomains.rocks',
+];
+
+// app.use(cors());
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', '*');
+  } if (method === 'OPTIONS') {
+    // разрешаем кросс-доменные запросы любых типов (по умолчанию)
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+  }
+  next();
+});
 app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
