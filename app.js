@@ -13,17 +13,14 @@ const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 204,
+};
+app.use(express.json(), cors(corsOptions));
 
-app.get('*', (req, res, next) =>{
-  res.json({ msg: 'This is CORS-enabled for all origins!'});
-})
-
-app.listen(PORT, () => {
-  console.log('CORS-enabled web server listening on port 80')
-})
 app.use(cookieParser());
-app.use(express.json());
+
 app.use(requestLogger);
 app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignIn, createUser);
