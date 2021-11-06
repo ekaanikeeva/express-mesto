@@ -10,10 +10,10 @@ const cardsRouter = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
 const { validateSignIn } = require('./middlewares/validate');
 const NotFoundError = require('./errors/NotFoundError');
-app.use(cors());
-const { PORT = 3000 } = process.env;
-const app = express();
 
+const { PORT = 3002 } = process.env;
+const app = express();
+app.use(cors());
 
 app.use(express.json());
 
