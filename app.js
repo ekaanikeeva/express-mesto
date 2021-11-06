@@ -1,6 +1,6 @@
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -10,10 +10,11 @@ const cardsRouter = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
 const { validateSignIn } = require('./middlewares/validate');
 const NotFoundError = require('./errors/NotFoundError');
-
+app.use(cors());
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(cors())
+
+
 app.use(express.json());
 
 app.use(cookieParser());
